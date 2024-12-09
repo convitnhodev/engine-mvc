@@ -5,36 +5,59 @@ const templateEngine = require('../20488');
 const movie_controller = require('../controllers/movie-controller');
 const review_controller = require('../controllers/review-controller');
 const { redirect } = require('express/lib/response');
-movie_router.get('/', async(req, res) => {
-  const topRevenueMovies = await movie_controller.getTopRevenueMovies();
-  const data ={
-    homePage:`
-  <div class="container-body">
-  <div>
-    <div id="movieCarousel" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        20488{for movie in topRevenueMovies}
-        <div class="carousel-item" class="active" key="{movie.id}">
-          <div class="d-flex justify-content-center" onclick="window.location.href='/movies/{movie.id}'">
-            <img class="revenueItemImg" src="{movie.image}" class="d-block w-30" alt="{movie.fullftitle}" />
-            <div class="movie-info movie-overlay mt-3">
-              <h4>{movie.fullftitle}</h4>
-            </div>
+movie_router.get('/', async (req, res) => {
+  try {
+    const topRevenueMovies = await movie_controller.getTopRevenueMovies();
+
+    const carouselItems = topRevenueMovies.map((movie, index) => `
+      <div class="carousel-item ${index === 0 ? 'active' : ''}" key="${movie.id}">
+        <div class="d-flex justify-content-center" onclick="window.location.href='/movies/${movie.id}'">
+          <img class="revenueItemImg" src="${movie.image}" class="d-block w-30" alt="${movie.fullftitle}" />
+          <div class="movie-info movie-overlay mt-3">
+            <h4>${movie.fullftitle}</h4>
           </div>
         </div>
-        {/for}
       </div>
-    </div>
-  </div>`,
-    topRevenueMovies: topRevenueMovies,
-    isHomePage: true,
-  } 
-  console.log(topRevenueMovies);
-  var returned = templateEngine.render(sample_template,data);
-  console.log(returned);
-  res.send(returned);
-});
+    `).join('');
 
+    const data = {
+      homePage: `
+        <div class="container-body">
+          <div>
+            <div id="movieCarousel" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                ${carouselItems}
+              </div>
+              <!-- Carousel controls -->
+              <a class="carousel-control-prev" href="#movieCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#movieCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+          <div class="container">
+  </div>
+  <h3>BOX OFFICE</h3>
+  <h3>FAVOURITE</h3>
+</div>
+        </div>`,
+      topRevenueMovies: topRevenueMovies,
+      isHomePage: true,
+    };
+
+
+    const returned = templateEngine.render(sample_template, data);
+
+    res.send(returned);
+  } catch (error) {
+    console.error('Error fetching top revenue movies:', error);
+    res.status(500).send('An error occurred while loading the home page.');
+  }
+});
 movie_router.get('/favourite', async (req, res) => {
   try {
       const movies = await movie_controller.getFavourtieMovies();  

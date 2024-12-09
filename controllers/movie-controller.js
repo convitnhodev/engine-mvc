@@ -13,10 +13,11 @@ const movie_controller = {
   },
   getTopRankedMovies : async (req,res)=>{
     try{
-    const movies = await Movie.getTopRank();
-    res.json({message: 'Get top ranked movies successfully.', status: 200, data: movies});
+        const model = new Movie();
+    const movies = await model.getTopRank();
+    return movies
     }catch(error){
-     res.json({message: 'Error Internal Server.', status: 500});
+        throw new Error(error.message);
     }
    },
    getTopRevenueMovies : async ()=>{
