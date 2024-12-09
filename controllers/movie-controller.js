@@ -17,12 +17,13 @@ const movie_controller = {
      res.json({message: 'Error Internal Server.', status: 500});
     }
    },
-   getTopRevenueMovies : async (req,res)=>{
+   getTopRevenueMovies : async ()=>{
     try{
-    const movies = await Movie.getTopRevenue();
-    res.json({message: 'Get top ranked movies successfully.', status: 200, data: movies});
+    const model = new Movie();
+    const movies = await model.getTopRevenue();
+    return movies;
     }catch(error){
-     res.json({message: 'Error Internal Server.', status: 500});
+     throw new Error(error.message);
     }
    },
 }

@@ -7,6 +7,7 @@ const db = pgp({
   database: 'wad2231db',
   user: 'u20120488',
   password: '5G*4p3DL',
+  schema: 's20488',
 });
 
 module.exports = db;

@@ -23,12 +23,12 @@ class Movie {
         throw new Error("Error getting top ranked movies");
        } 
     }
-    async getTopRevenue() {
+    async getTopRevenue () {
         try {
           const movies = await db.any(
             `SELECT * 
-           FROM movies
-           ORDER BY CAST(REPLACE(REPLACE(cumulativeWorldwideGross, '$', ''), ',', '') AS NUMERIC) DESC
+           FROM s20488.movie
+           ORDER BY CAST(REPLACE(REPLACE(cumulative_world_wide_gross, '$', ''), ',', '') AS NUMERIC) DESC
            LIMIT 50`
           );
           return movies;
@@ -37,6 +37,20 @@ class Movie {
           throw new Error("Failed to fetch top revenue movies.");
         }
       }
+      async getFavourite () {
+        try {
+          const movies = await db.any(
+            `SELECT * 
+           FROM s20488.movie
+           WHERE favourite = TRUE`
+          );
+          return movies;
+        } catch (error) {
+          console.error("Error fetching favourite movies:", error);
+          throw new Error("Failed to fetch favourite movies.");
+        }
+      }
+    
 }
 
 module.exports = Movie
