@@ -1,9 +1,9 @@
+
 module.exports = {
     render: function (template, data) {
       template = this.handleTemplate(template, data);
-    template = this.handleFor(template, data);
-    template = this.handleIf(template, data);
-   
+      template = this.handleFor(template, data);
+      template = this.handleIf(template, data);
       template = this.replaceVariables(template, data);
   
       return template;

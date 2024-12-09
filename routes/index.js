@@ -7,7 +7,7 @@ router.use('/movies', movie_router);
 
 
 router.get('/', (req, res) => {
- res.Redirect('/movies');
+ res.redirect('/movies');
 });
 
 module.exports = router;
