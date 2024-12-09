@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const movie_router = require('./movie');
+
+
+router.use('/movies', movie_router);
+
 
 router.get('/', (req, res) => {
-  res.send('Welcome to the Node.js app!');
+ res.Redirect('/movies');
 });
 
 module.exports = router;

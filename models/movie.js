@@ -37,5 +37,6 @@ class Movie {
           throw new Error("Failed to fetch top revenue movies.");
         }
       }
-
 }
+
+module.exports = Movie
