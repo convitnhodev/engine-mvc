@@ -37,12 +37,21 @@
                     </a>
                     <div class="search-tool">
                         <input id="search-text" type="text" placeholder="Search movies..." />
-                        <button id="search-button" class="btn-search">Search</button>
+                        <button id="search-button" class="btn-search" >Search</button>
                     </div>
                 </div>
             </div>
             20488{if isHomePage}
             20488{+ homePage}
+            {else}
+            {/if}
+            20488{if isFavourite}
+            20488{+ favourite}
+            {else}
+            {/if}
+
+            20488{if isSearch}
+            20488{+ searchPage}
             {else}
             {/if}
 
@@ -530,6 +539,13 @@
             document.getElementById("icon-change-mode").setAttribute("src", "icons/sun-svgrepo-com.svg");
         }
     }
+    document.getElementById("search-button").addEventListener("click", function () {
+    const searchText = document.getElementById("search-text").value.trim();
+    if (searchText) {
+        window.location.href = `/movies/search?search=${encodeURIComponent(searchText)} && page=1`;
+    } else {
+        alert("Please enter a search term!");
+    }});
 </script>
 
 </html>

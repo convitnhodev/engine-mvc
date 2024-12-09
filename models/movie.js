@@ -13,6 +13,38 @@ class Movie {
           throw new Error("Error getting movies");
         }  
     }
+    async countAllBySearch(search) {
+      try {
+          const query = `
+              SELECT COUNT(*) 
+              FROM s20488.movie 
+              WHERE LOWER(fullftitle) LIKE LOWER($1)
+          `;
+          const result = await db.one(query, [`%${search}%`]);
+          return result.count;
+      } catch (error) {
+          console.error("Error counting movies", error);
+          throw new Error("Error counting movies");
+      }
+     }
+  
+   async getMoviesBySearch(pageNumber, pageSize, search ) {
+    try {
+        const offset = (pageNumber - 1) * pageSize;
+        const query = `
+            SELECT * 
+            FROM s20488.movie 
+            WHERE LOWER(fullftitle) LIKE '%' || LOWER($1) || '%'
+            LIMIT $2 OFFSET $3
+        `;
+        const movies = await db.any(query, [`${search}`, pageSize, offset]);
+        return movies;
+    } catch (error) {
+        console.error("Error querying movies", error);
+        throw new Error("Error getting movies");
+    }
+}
+
 
     async getTopRank(){
       try{
