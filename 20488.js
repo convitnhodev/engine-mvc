@@ -1,5 +1,9 @@
 module.exports = {
     render: function (template, data) {
+      template = this.handleTemplate(template, data);
+    template = this.handleFor(template, data);
+    template = this.handleIf(template, data);
+   
       template = this.replaceVariables(template, data);
   
       return template;
@@ -60,7 +64,6 @@ module.exports = {
             }
           );
     },
-      
     evaluateCondition: function (condition, data) {
           const trimmedCondition = condition.trim();
       
@@ -93,4 +96,24 @@ module.exports = {
         }
       );
     },
- };
+    handleTemplate: function (template, data) {
+      return template.replace(/20488{\+ (.*?)\}/gs, (match, sectionName) => {
+        const sectionContent = this.getSectionContent(sectionName, data);
+        if (sectionContent !== undefined) {
+          let processedContent = this.handleFor(sectionContent, data);
+          processedContent = this.handleIf(processedContent, data);
+          processedContent = this.replaceVariables(processedContent, data);
+  
+          return processedContent;
+        }
+        return match;
+      });
+    },
+    getSectionContent: function (sectionName, data) {
+      if (data[sectionName]) {
+        return data[sectionName];
+      }
+      console.error(`Section '${sectionName}' not found in data.`);
+      return undefined;
+    },
+};
