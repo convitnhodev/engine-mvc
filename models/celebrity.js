@@ -43,7 +43,18 @@ class Celebrity {
         console.error("Error querying celebrities", error);
         throw new Error("Error getting celebrities");
     }
-}
+}    
+      async getActorByMovieId(movieId) {
+        try {
+            const query = 'SELECT c.id, c.name, c.image FROM s20488.celebrity c JOIN s20488.actor a ON c.id = a.celebrity_id WHERE a.movie_id = '+"'"+movieId+"'";
+            ;const actors = await db.any(query);
+            return actors;
+
+        } catch (error) {
+            console.error("Error querying celebrities", error);
+            throw new Error("Error getting celebrities");
+        }
+      }
       async getDetailById(id) {
         try {
           const movies = await db.oneOrNone(
@@ -61,4 +72,4 @@ class Celebrity {
     
 }
 
-module.exports = Movie
+module.exports = Celebrity

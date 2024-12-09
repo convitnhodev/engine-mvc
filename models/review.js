@@ -2,10 +2,10 @@ const db = require('../config/db');
 
 class Review {
    
-    async getAll(){
+    async getAllByMovieId(id){
         try
         {
-        const reviews = await db.any("SELECT * FROM s20488.review");
+        const reviews = await db.any("SELECT * FROM s20488.review where movie_id = '"+id+"'",);
         return reviews;
         } catch (error) 
         {
@@ -13,6 +13,7 @@ class Review {
           throw new Error("Error getting reviews", error);
         }  
     }
+
     async postReview({ username, rate, title, content, movieId }) {
         try {
             const query = `
@@ -33,4 +34,4 @@ class Review {
     
 }
 
-module.exports = Celebrity
+module.exports = Review

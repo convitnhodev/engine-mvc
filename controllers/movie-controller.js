@@ -1,4 +1,6 @@
 const Movie = require('../models/movie');
+const Reivew = require('../models/review');
+const Celebrity = require('../models/celebrity');
 
 const movie_controller = {
    getAllMovies : async (req,res)=>{
@@ -54,6 +56,33 @@ const movie_controller = {
     }catch(error){
      throw new Error(error.message);
     }
+   },
+   getReviewByMovieId : async (movieId) =>{
+    try{
+        const model = new Reivew();
+        const reviews = await model.getAllByMovieId(movieId);
+        return reviews;
+        }catch(error){
+         throw new Error(error.message);
+        }
+   },
+   getMovieById : async (movieId) =>{
+    try{
+        const model = new Movie();
+        const movie = await model.getDetailById(movieId);
+        return movie;
+        }catch(error){
+         throw new Error(error.message);
+        }
+   },
+   getActorByMovieId : async (movieId) =>{
+    try{
+        const model = new Celebrity();
+        const celebrities = await model.getActorByMovieId(movieId);
+        return celebrities;
+        }catch(error){
+         throw new Error(error.message);
+        }
    },
 }
 

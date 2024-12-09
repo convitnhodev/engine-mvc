@@ -5,7 +5,7 @@ class Movie {
     async getAll(){
         try
         {
-        const movies = await db.any("SELECT * FROM movie");
+        const movies = await db.any("SELECT * FROM s20488.movie");
         return movies;
         } catch (error) 
         {
@@ -48,7 +48,7 @@ class Movie {
 
     async getTopRank(){
       try{
-        const movies = await db.any("SELECT * FROM movie ORDER BY im_db_rating DESC LIMIT 50");
+        const movies = await db.any("SELECT * FROM s20488.movie ORDER BY im_db_rating DESC LIMIT 50");
         return movies;
        }catch (error)   {
         console.error("Error query top ranked movies" ,error);
@@ -81,6 +81,21 @@ class Movie {
           console.error("Error fetching favourite movies:", error);
           throw new Error("Failed to fetch favourite movies.");
         }
+      }
+
+      async getDetailById(id) {
+        try {
+          const movies = await db.oneOrNone(
+            `SELECT * 
+           FROM s20488.movie
+           WHERE id = '${id}'`
+          );
+          return movies;
+        } catch (error) {
+          console.error("Error fetching favourite movies:", error);
+          throw new Error("Failed to fetch favourite movies.");
+        }
+
       }
     
 }
