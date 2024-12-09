@@ -14,15 +14,23 @@ class Review {
         }  
     }
 
-    async postReview({ username, rate, title, content, movieId }) {
+    async postReview(username, rate, title, content, movieId ) {
         try {
+
+            const currentDate = new Date();
+
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); 
+            const day = String(currentDate.getDate()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day}`;
             const query = `
-                INSERT INTO review (username, warning_spoilers, date, rate, title, content, movie_id)
+                INSERT INTO s20488.review (username, warning_spoilers, date, rate, title, content, movie_id)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
                 RETURNING *;
             `;
     
-            const values = [username, false, Date(), rate, title, content, movieId];
+            const values = [username, false, formattedDate, rate, title, content, movieId];
     
             const review = await db.one(query, values);
             return review;

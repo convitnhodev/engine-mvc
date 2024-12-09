@@ -163,10 +163,8 @@ movie_router.get('/:id', async function (req, res) {
             <div class="carousel-inner top-rating-caursol-inner">
               ${actors.map((actor, index) => `
                 <div class="carousel-item top-rating-caursol-item ${index === 0 ? 'active' : ''}">
-                  <div class="d-flex justify-content-around">
-                    <div class="top-rating-movie-item" onClick={${()=>{
-                      redirect('/actors/'+actor.id)
-                    }}}>
+                  <div class="d-flex justify-content-around" onclick="window.location.href='/actors/${actor.id}'" >
+                    <div class="top-rating-movie-item"  >
                       <img src="${actor.image}" class="d-block w-30" alt="${actor.name}">
                       <div class="mt-3"><h4>${actor.name}</h4></div>
                     </div>
@@ -186,7 +184,7 @@ movie_router.get('/:id', async function (req, res) {
 
           <h2>Reviews</h2>
           <h3>Submit Your Review</h3>
-<form id="reviewForm">
+<form id="reviewForm" method="POST" action="/movies/${movie.id}/reviews">
   
 
 <div class="form-group">
@@ -194,18 +192,18 @@ movie_router.get('/:id', async function (req, res) {
 <input type="text" id="username" name="username" class="form-control" required />
 </div>
   <div class="form-group">
-    <label for="reviewTitle">Title</label>
-    <input type="text" id="reviewTitle" name="title" class="form-control" required />
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" class="form-control" required />
   </div>
   
   <div class="form-group">
-    <label for="reviewContent">Review Content</label>
-    <textarea id="reviewContent" name="content" class="form-control" rows="4" required></textarea>
+    <label for="content">Review Content</label>
+    <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
   </div>
 
   <div class="form-group">
-    <label for="reviewRating">Rating</label>
-    <select id="reviewRating" name="rating" class="form-control" required>
+    <label for="rating">Rating</label>
+    <select id="rating" name="rating" class="form-control" required>
       <option value="1">1 Star</option>
       <option value="2">2 Stars</option>
       <option value="3">3 Stars</option>
@@ -219,7 +217,7 @@ movie_router.get('/:id', async function (req, res) {
     </select>
   </div>
 
-  <button type="submit" class="btn btn-primary" onClick="SubmitForm()">Submit Review</button>
+  <button type="submit" class="btn btn-primary">Submit Review</button>
 </form>
 
 <div id="reviewSuccessMessage" class="alert alert-success" style="display: none;">Review submitted successfully!</div>
@@ -265,14 +263,12 @@ movie_router.post('/:id/reviews', async function (req, res) {
     console.log(title, content, rating, username);
    
     if (!title || !content || !rating || !username) {
-      return res.status(400).json({ message: 'All fields are required' });
+      return res.status(400).json({ message: 'all field required' });
     }
 
-    console.log('aaaaa');
-    await review_controller.postReview ({movieId, title, content, rating,username});
-    console.log('bbb');
-    res.status(200).json({ message: 'Review submitted successfully' });
-
+    const result =  await review_controller.postReview (username, content, title , rating, movieId);
+    var message="Review successfully created";
+    return res.redirect('/movies/' + movieId+ '?message=message')
   } catch (error) {
     console.error('Error submitting review:', error);
     res.status(500).json({ message: 'Error submitting review. Please try again.' });

@@ -60,7 +60,7 @@ class Celebrity {
           const movies = await db.oneOrNone(
             `SELECT * 
            FROM s20488.celebrity
-           WHERE id = ${id}`
+           WHERE id = '${id}'`
           );
           return movies;
         } catch (error) {

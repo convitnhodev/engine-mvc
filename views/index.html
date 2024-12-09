@@ -60,6 +60,11 @@
             {else}
             {/if}
 
+            20488{if isDetailActor}
+            20488{+ actorPage}
+            {else}
+            {/if}
+
         
            
         </div>
@@ -553,43 +558,11 @@
     }});
 
 
-    const SubmitForm = () => {
-  const reviewTitle = $('#reviewTitle').val();
-  const reviewContent = $('#reviewContent').val();
-  const reviewRating = $('#reviewRating').val();
-  const username = $('#username').val();
-  const movieId = window.location.pathname.split('/').pop(); 
-
-  if (!reviewTitle || !reviewContent || !reviewRating || !username) {
-    alert('Please fill in all the fields.');
-    return;
+    const urlParams = new URLSearchParams(window.location.search);
+  const message = urlParams.get('message');
+  if (message) {
+    alert(message);
   }
-
-  $.ajax({
-    url: `/movies/${movieId}/reviews`, 
-    method: 'POST',
-    data: {
-      title: reviewTitle,
-      content: reviewContent,
-      rating: reviewRating,
-      username: username 
-    },
-    success: function (response) {
-      $('#reviewSuccessMessage').show();
-      $('#reviewErrorMessage').hide();
-
-      $('#reviewForm')[0].reset();
-
-
-      window.location.href = `/movies/${movieId}`;
-    },
-    error: function (error) {
-      console.error("Error submitting review:", error);
-      $('#reviewErrorMessage').show();
-      $('#reviewSuccessMessage').hide();
-    }
-  });
-}
 
 </script>
 
