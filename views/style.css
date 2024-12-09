@@ -17,7 +17,7 @@
     justify-content: space-between;
     align-items: center;
     background: #d3e1fd;
-    border: 1px solid ##d9e3f5;
+    border: 1px solid #d9e3f5;
     margin-bottom: 5px;
   }
   .carousel-control-prev-icon,
@@ -49,7 +49,7 @@
     text-align: center;
     z-index: 2;
   }
-  ..movie-overlay h4 {
+  .movie-overlay h4 {
     font-size: 18px;
     font-weight: bold;
   }
