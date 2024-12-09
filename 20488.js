@@ -70,4 +70,27 @@ module.exports = {
             return false;
           }
     },
+    handleFor: function (template, data) {
+      return template.replace(
+        /20488{for (.*?) in (.*?)}(.*?){\/for}/gs,
+        (match, variable, arrayName, content) => {
+          const array = data[arrayName.trim()];
+          if (!Array.isArray(array)) {
+            console.error(
+              `Expected an array for '${arrayName}', but got: ${typeof array}`
+            );
+            return match;
+          }
+  
+          return array
+            .map((item) => {
+              return content.replace(/{(.*?)}/g, (key) => {
+                const prop = key.replace(/[{}]/g, "").trim().split(".")[1];
+                return item[prop] || key;
+              });
+            })
+            .join("");
+        }
+      );
+    },
  };
